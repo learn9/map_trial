@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Current Location of Toyota</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -90px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+// In the following example, markers appear when the user clicks on the map.
+// The markers are stored in an array.
+// The user can then click an option to hide, show or delete the markers.
+var map;
+var markers = [];
+
+var sampleLocations = [
+	new google.maps.LatLng(37.39777807755234, -122.08488464355469),
+	new google.maps.LatLng(37.391572787725885, -122.08857536315918),
+	new google.maps.LatLng(37.39968729414495, -122.09775924682617),
+	new google.maps.LatLng(37.40541465208699, -122.09063529968262),
+	new google.maps.LatLng(37.40596009191685, -122.08273887634277),
+	new google.maps.LatLng(37.405005569608804, -122.07947731018066)
+];
+
+function initialize() {
+	var mountainView = new google.maps.LatLng(37.39798263879942, -122.09003448486328);
+  //var haightAshbury = new google.maps.LatLng(37.7699298, -122.4469157);
+  var mapOptions = {
+    zoom: 16,
+    center: mountainView,
+    //mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  // This event listener will call addMarker() when the map is clicked.
+  google.maps.event.addListener(map, 'click', function(event) {
+    addMarker(event.latLng);
+	console.log(event.latLng);
+  });
+
+  // Adds a marker at the center of the map.
+  addMarker(mountainView);
+}
+
+function moveMarker(location) {
+	deleteMarkers();
+	addMarker(location);
+}
+
+/** 
+ * eg. moveMarker2(37.39777807755234, -122.08488464355469)
+ */
+function moveMarker2(lat, lng) {
+	var latlng = new google.maps.LatLng(lat, lng);
+	moveMarker(latlng);
+}
+
+function moveMarker3(lat, lng) {
+	var latlng = new google.maps.LatLng(lat, lng);
+	markers[0].setPosition(latlng);
+}
+
+// Add a marker to the map and push to the array.
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    icon: 'car.png'
+  });
+  markers.push(marker);
+}
+
+// Sets the map on all markers in the array.
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="panel">
+      <!-- input onclick="clearMarkers();" type=button value="Hide Markers">
+      <input onclick="showMarkers();" type=button value="Show All Markers">
+      <input onclick="deleteMarkers();" type=button value="Delete Markers">-->
+      <input onclick="showMarkers();" type=button value="Refresh">
+    </div>
+    <div id="map-canvas"></div>
+    <p>Click on the map to add markers.</p>
+  </body>
+</html>
